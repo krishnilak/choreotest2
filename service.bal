@@ -1,12 +1,14 @@
 import ballerina/http;
+import ballerinax/mysql;
+import ballerina/sql;
 
 # A service representing a network-accessible API
 # bound to port `9090`.
-configurable string USER = USER;
-configurable string PASSWORD = PASSWORD;
-configurable string HOST = HOST;
-configurable int PORT = PORT;
-configurable string DATABASE = DATABASE;
+configurable string USER =?;
+configurable string PASSWORD = ?;
+configurable string HOST = ?;
+configurable int PORT = ?;
+configurable string DATABASE = ?;
 
 public type LikedItem record {|
     int user_id;
