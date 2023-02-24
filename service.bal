@@ -8,6 +8,18 @@ public type LikedItem record {|
     int item_id;
 |};
 
+public type Items record {|
+    int item_id;
+    string title;
+    string description;
+    string includes;
+    string intended_for;
+    string color;
+    string material;
+    string price;
+    string image_url;
+|};
+
 # A service representing a network-accessible API
 # bound to port `9090`.
 configurable string USER =?;
@@ -32,6 +44,22 @@ isolated function likeItem(LikedItem li) returns int|error  {
     }
 }
 
+isolated function getAllItems() returns Items[]|error {
+
+        Items[] items = [];
+    stream<Items, error?> resultStream = dbClient->query(
+        `SELECT * FROM items`
+    );
+    check from Items i in resultStream
+        do {
+            items.push(i);
+        };
+    check resultStream.close();
+    return items;
+}
+
+   
+
 service / on new http:Listener(9090) {
 
     # A resource for generating greetings
@@ -49,9 +77,8 @@ service / on new http:Listener(9090) {
         return likeItem(li);
     }
 
-
- 
-   
-
+    resource function get .() returns Items[]|error? {
+        return getAllItems();
+    }
 
 }
